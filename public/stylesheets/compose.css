@@ -1,0 +1,15 @@
+.home-div {
+    padding: 2% 15%;
+}
+
+form {
+    margin-top: 20px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button[type="submit"] {
+    margin-top: 15px;
+}
