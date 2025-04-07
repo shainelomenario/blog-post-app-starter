@@ -2,6 +2,7 @@ var express = require('express');
 const fs = require("fs");
 var router = express.Router();
 const postDBFileName = "./model/postDB.json";
+const userDBFileName = "./model/userDB.json";
 
 
 router.get('/', function(req, res, next) {
@@ -10,7 +11,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/feed', function(req, res, next) {
   if(req.cookies.loggin === "false") res.redirect("/");
-  let posts = readPostDB();
+  let posts = readDB(postDBFileName);
   res.render('./main/feed', {posts: posts.posts});
 });
 
@@ -31,9 +32,15 @@ router.post('/compose/submit', function(req, res) {
     });
   }
 
-  let postDB = readPostDB();
+  let postDB = readDB(postDBFileName);
+  let userDB = readDB(userDBFileName);
 
-  const newPost = {title, body};
+  // let authorName = userDB.find(authorName.fullname);
+  const timePosted = new Date().toISOString();
+
+
+
+  const newPost = {title, body, timePosted};
 
   // Add new post to the beginning of the posts array DB
   postDB.posts.unshift(newPost);
@@ -49,8 +56,9 @@ router.post('/compose/submit', function(req, res) {
 
 
 
-function readPostDB() {
-    let data = fs.readFileSync(postDBFileName, "utf-8");
+function readDB(database) {
+    let db = database;
+    let data = fs.readFileSync(db, "utf-8");
     return JSON.parse(data);
 }
 
